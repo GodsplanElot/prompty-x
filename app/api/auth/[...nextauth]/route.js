@@ -17,10 +17,20 @@ const handler = NextAuth({
         try {
             await connectToDB();
             //check if a user already exists
+            const userExits = await User.findOne({
+                email: profile.email
+            });
 
 
 
             //if not create a new user and save to database
+            if (!userExits) {
+                await User.create({
+                    email: profile.email,
+                    username: profile.name.replace(" ", "").toLowerCase(),
+                    image: profile.picture
+                })
+            }
 
 
             return true;
